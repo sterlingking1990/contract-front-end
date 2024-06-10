@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-latest # Corrected syntax here
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -16,10 +16,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18 # Updated Node.js version to 18
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: yarn install --frozen-lockfile # Changed to run command instead of using bahmutov/npm-install
 
       - name: Build project
         run: npm run build
