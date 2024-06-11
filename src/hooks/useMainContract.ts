@@ -40,8 +40,9 @@ export function useMainContract(){
             setContractData(null);
             const val = await mainContract.getData();
             const {balance} = await mainContract.getBalance();
+            
             setContractData({
-                counter_value: val.number,
+                counter_value: val.counter_value,
                 recent_sender: val.recent_sender,
                 owner_address: val.owner_address,
             });
