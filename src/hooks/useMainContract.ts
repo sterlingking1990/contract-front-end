@@ -4,9 +4,7 @@ import { useTonClient } from "./useTonClient";
 import { useEffect,useState } from "react";
 import {MainContract} from '../contracts/MainContract';
 import { useTonConnect } from "./useTonConnect";
-import { toNano
-
- } from "ton-core";
+import { toNano } from "ton-core";
 
 
 export function useMainContract(){
@@ -42,7 +40,7 @@ export function useMainContract(){
             const {balance} = await mainContract.getBalance();
             
             setContractData({
-                counter_value: val.counter_value,
+                counter_value: val.number,
                 recent_sender: val.recent_sender,
                 owner_address: val.owner_address,
             });
