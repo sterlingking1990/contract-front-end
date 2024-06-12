@@ -42,6 +42,13 @@ export function useMainContract() {
                 return;
             }
             setContractData(null);
+            try {
+                // Adjust the parameters as needed for deployment
+                await mainContract.sendDeploy(sender, toNano("0.1"));
+                console.log("Contract deployed successfully!");
+            } catch (error) {
+                console.error("Error deploying contract:", error);
+            }
             console.log("Calling mainContract.getData()");
             try {
                 const val:any = await mainContract.getData();
