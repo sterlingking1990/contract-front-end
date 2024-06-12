@@ -1,4 +1,5 @@
 import { Address, Cell, Contract, ContractProvider, SendMode, Sender, beginCell, contractAddress } from "ton-core";
+import { useTonClient } from "../hooks/useTonClient";
 
 export type MainContractConfig = {
   number: number;
@@ -9,15 +10,10 @@ export function mainContractConfigToCell(config: MainContractConfig): Cell {
   return beginCell().storeUint(config.number, 32).storeAddress(config.address).storeAddress(config.owner_address).endCell();
 }
 export class MainContract implements Contract {
-  provider: ContractProvider | undefined;
   constructor(
     readonly address: Address,
     readonly init?: { code: Cell; data: Cell }
   ) {}
-
-  setProvider(provider: ContractProvider) {
-    this.provider = provider;
-  }
 
   static createFromConfig(
     code: Cell,
@@ -87,11 +83,12 @@ export class MainContract implements Contract {
   }
 
   async getData(){
-    if (!this.provider) {
+    const provider = useTonClient()?.provider as any;
+    if (!useTonClient()?.provider) {
       throw new Error("Provider not set");
     }
     try {
-      const { stack } = await this.provider.get("get_contract_storage_data", []);
+      const { stack } = await provider.get("get_contract_storage_data", []);
       console.log("Stack response:", stack);
 
       return {
@@ -107,11 +104,12 @@ export class MainContract implements Contract {
   }
 
   async getBalance(){
-    if(!this.provider){
+    const provider = useTonClient()?.provider as any;
+    if(!provider){
       throw new Error("Provider not set");
     }
     try{
-    const {stack}  = await this.provider.get("balance",[]);
+    const {stack}  = await provider.get("balance",[]);
     return {
       balance: stack.readNumber()
     }

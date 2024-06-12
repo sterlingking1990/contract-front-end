@@ -6,11 +6,11 @@ import { useEffect, useState } from "react";
 import { MainContract } from '../contracts/MainContract';
 import { useTonConnect } from "./useTonConnect";
 import { toNano } from "ton-core";
-import MyContractProvider from './ContractProviderWrapper';
 
 export function useMainContract() {
     const client = useTonClient();
     const { sender } = useTonConnect();
+    
 
     const sleep = (time: number) =>
         new Promise((resolve) => setTimeout(resolve, time));
@@ -32,8 +32,7 @@ export function useMainContract() {
         const contract = new MainContract(
             Address.parse("EQCD1o3InWOcSeWEh8P6mOisSDfWm6DdmyecyUQO8Eanu8c-")
         );
-        const contractProvider = new MyContractProvider(client,contract.address);
-        contract.setProvider(contractProvider);
+
         console.log("MainContract initialized");
         return client.open(contract) as OpenedContract<MainContract>;
     }, [client]);
