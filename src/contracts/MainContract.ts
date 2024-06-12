@@ -96,7 +96,7 @@ export class MainContract implements Contract {
     });
   }
 
-  async getData(provider: ContractProvider) {
+  async getData() {
     if (!this.initialized  || !this.contractProvider) {
       console.error("mainContract not initialized");
       return null;
@@ -121,7 +121,7 @@ export class MainContract implements Contract {
     }
   }
 
-  async getBalance(provider: ContractProvider) {
+  async getBalance() {
     if (!this.initialized || !this.contractProvider) {
       console.error("mainContract not initialized");
       return null;
