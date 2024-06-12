@@ -17,7 +17,7 @@ class MyContractProvider implements ContractProvider {
     }
 
     async get(name: string, args: TupleItem[]): Promise<ContractGetMethodResult> {
-        return this.client.runGetMethod(this.address, name, args);
+        return this.client.get(this.address, name, args);
     }
 
     async external(message: Cell): Promise<void> {
