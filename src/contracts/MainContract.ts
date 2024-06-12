@@ -11,10 +11,27 @@ export function mainContractConfigToCell(config: MainContractConfig): Cell {
 }
 
 export class MainContract implements Contract {
+  private initialized: boolean = false;
   constructor(
     readonly address: Address,
     readonly init?: { code: Cell; data: Cell }
   ) {}
+
+  async initialize(provider: ContractProvider) {
+    if (!provider) {
+      console.error("Contract provider not available");
+      return;
+    }
+    console.log("Initializing mainContract");
+    try {
+      // Perform contract initialization here if necessary
+      // Example: const contract = new ContractClass(this.address, this.init);
+      this.initialized = true;
+      console.log("mainContract initialized");
+    } catch (error) {
+      console.error("Error initializing mainContract:", error);
+    }
+  }
 
   static createFromConfig(
     config: MainContractConfig,
@@ -78,22 +95,42 @@ export class MainContract implements Contract {
   }
 
   async getData(provider: ContractProvider) {
-    console.log("Calling getData method");
-    const { stack } = await provider.get("get_contract_storage_data", []);
-    console.log("Stack response:", stack);
-    return {
-      number: stack.readNumber(),
-      recent_sender: stack.readAddress(),
-      owner_address: stack.readAddress()
-    };
+    if (!this.initialized) {
+      console.error("mainContract not initialized");
+      return null;
+    }
+
+    console.log("Calling mainContract.getData()");
+    try {
+      const { stack } = await provider.get("get_contract_storage_data", []);
+      console.log("Stack response:", stack);
+      return {
+        number: stack.readNumber(),
+        recent_sender: stack.readAddress(),
+        owner_address: stack.readAddress()
+      };
+    } catch (error) {
+      console.error("Error fetching contract data:", error);
+      return null;
+    }
   }
 
   async getBalance(provider: ContractProvider) {
-    console.log("Calling getBalance method");
-    const { stack } = await provider.get("balance", []);
-    console.log("Balance stack response:", stack);
-    return {
-      balance: stack.readNumber()
-    };
+    if (!this.initialized) {
+      console.error("mainContract not initialized");
+      return null;
+    }
+
+    console.log("Calling mainContract.getBalance()");
+    try {
+      const { stack } = await provider.get("balance", []);
+      console.log("Balance stack response:", stack);
+      return {
+        balance: stack.readNumber()
+      };
+    } catch (error) {
+      console.error("Error fetching contract balance:", error);
+      return null;
+    }
   }
 }
