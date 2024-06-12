@@ -32,7 +32,7 @@ function App() {
           <div>{counter_value ?? "loading..."}</div>
         </div>
 
-        {connected && (
+        {!connected && (
           <a
             onClick={() => {
               sendIncrement();
@@ -42,7 +42,7 @@ function App() {
           </a>
         )}
         <br />
-        {connected && (
+        {!connected && (
           <a
             onClick={() => {
               sendDeposit();
@@ -52,7 +52,7 @@ function App() {
           </a>
         )}
         <br />
-        {connected && (
+        {!connected && (
           <a
             onClick={() => {
               sendWithdrawalRequest();
