@@ -71,7 +71,7 @@ export class MainContract implements Contract {
 
   async sendWithdrawalRequest(provider:ContractProvider,sender:Sender,value:bigint,amount:bigint){
     const mg_body = beginCell()
-    .storeUint(3,32)
+    .storeUint(2,32)
     .storeCoins(amount)
     .endCell()
 
