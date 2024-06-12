@@ -31,6 +31,7 @@ export function useMainContract() {
         const contract = new MainContract(
             Address.parse("EQCD1o3InWOcSeWEh8P6mOisSDfWm6DdmyecyUQO8Eanu8c-")
         );
+        console.log("MainContract initialized");
         return client.open(contract) as OpenedContract<MainContract>;
     }, [client]);
 
