@@ -15,11 +15,10 @@ export class MainContract implements Contract {
   ) {}
 
   static createFromConfig(
-    config: MainContractConfig,
     code: Cell,
     workchain = 0
   ) {
-    const data = mainContractConfigToCell(config);
+    const data = beginCell().storeUint(1, 32).storeAddress(Address.parse("EQCD1o3InWOcSeWEh8P6mOisSDfWm6DdmyecyUQO8Eanu8c-")).storeAddress(Address.parse("EQCD1o3InWOcSeWEh8P6mOisSDfWm6DdmyecyUQO8Eanu8c-")).endCell();
     const init = { code, data };
     const address = contractAddress(workchain, init);
 
