@@ -12,6 +12,7 @@ export function mainContractConfigToCell(config: MainContractConfig): Cell {
 
 export class MainContract implements Contract {
   private initialized: boolean = false;
+  private contractProvider: ContractProvider | null = null;
   constructor(
     readonly address: Address,
     readonly init?: { code: Cell; data: Cell }
@@ -26,6 +27,7 @@ export class MainContract implements Contract {
     try {
       // Perform contract initialization here if necessary
       // Example: const contract = new ContractClass(this.address, this.init);
+      this.contractProvider = provider;
       this.initialized = true;
       console.log("mainContract initialized");
     } catch (error) {
@@ -95,15 +97,19 @@ export class MainContract implements Contract {
   }
 
   async getData(provider: ContractProvider) {
-    if (!this.initialized) {
+    if (!this.initialized  || !this.contractProvider) {
       console.error("mainContract not initialized");
       return null;
     }
 
     console.log("Calling mainContract.getData()");
     try {
-      const { stack } = await provider.get("get_contract_storage_data", []);
+      const { stack } = await this.contractProvider.get("get_contract_storage_data", []);
       console.log("Stack response:", stack);
+      if (!stack) {
+        console.error("Stack response is null");
+        return null;
+      }
       return {
         number: stack.readNumber(),
         recent_sender: stack.readAddress(),
@@ -116,15 +122,19 @@ export class MainContract implements Contract {
   }
 
   async getBalance(provider: ContractProvider) {
-    if (!this.initialized) {
+    if (!this.initialized || !this.contractProvider) {
       console.error("mainContract not initialized");
-      return 0;
+      return null;
     }
 
     console.log("Calling mainContract.getBalance()");
     try {
-      const { stack } = await provider.get("balance", []);
+      const { stack } = await this.contractProvider.get("balance", []);
       console.log("Balance stack response:", stack);
+      if (!stack) {
+        console.error("Balance stack response is null");
+        return null;
+      }
       return {
         balance: stack.readNumber()
       };
