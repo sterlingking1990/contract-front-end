@@ -6,6 +6,18 @@ import { MainContract } from '../contracts/MainContract';
 import { useTonConnect } from "./useTonConnect";
 import { toNano } from "ton-core";
 
+interface ContractData {
+    counter_value: number;
+    recent_sender: Address;
+    owner_address: Address;
+}
+
+interface ContractState {
+    contract_address: string;
+    contract_balance: number | null;
+    contractData: ContractData | null;
+}
+
 export function useMainContract() {
     const client = useTonClient();
     const { sender } = useTonConnect();
@@ -13,18 +25,16 @@ export function useMainContract() {
     const sleep = (time: number) =>
         new Promise((resolve) => setTimeout(resolve, time));
 
-    const [contractData, setContractData] = useState<null | {
-        counter_value: number;
-        recent_sender: Address;
-        owner_address: Address;
-    }>();
-
-    const [balance, setBalance] = useState<null | number>(0);
+    const [contractState, setContractState] = useState<ContractState>({
+        contract_address: '',
+        contract_balance: 0,
+        contractData: null,
+    });
 
     const mainContract = useAsyncInitialize(async () => {
         if (!client) {
             console.log("Client not initialized");
-            return;
+            return null;
         }
         console.log("Initializing mainContract");
         const contract = new MainContract(
@@ -39,20 +49,26 @@ export function useMainContract() {
                 console.log("mainContract not initialized");
                 return;
             }
-            setContractData(null);
+            setContractState((prevState) => ({
+                ...prevState,
+                contractData: null,
+            }));
             console.log("Calling mainContract.getData()");
-            const val = await mainContract.getData();
+            const val:any = await mainContract.getData();
             console.log("Received data:", val);
 
-            const { balance } = await mainContract.getBalance();
+            const balance:any  = await mainContract.getBalance();
             console.log("Received balance:", balance);
 
-            setContractData({
-                counter_value: val.number,
-                recent_sender: val.recent_sender,
-                owner_address: val.owner_address,
-            });
-            setBalance(balance);
+            setContractState((prevState) => ({
+                ...prevState,
+                contractData: {
+                    counter_value: val.number,
+                    recent_sender: val.recent_sender,
+                    owner_address: val.owner_address,
+                },
+                contract_balance: balance,
+            }));
             await sleep(5000);
             getValue();
         }
@@ -60,9 +76,9 @@ export function useMainContract() {
     }, [mainContract]);
 
     return {
-        contract_address: mainContract?.address.toString(),
-        contract_balance: balance,
-        ...contractData,
+        contract_address: mainContract?.address.toString() || '',
+        contract_balance: contractState.contract_balance,
+        ...contractState.contractData,
         sendIncrement: async () => {
             return mainContract?.sendIncrement(sender, toNano("0.05"), 5);
         },

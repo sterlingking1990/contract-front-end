@@ -118,7 +118,7 @@ export class MainContract implements Contract {
   async getBalance(provider: ContractProvider) {
     if (!this.initialized) {
       console.error("mainContract not initialized");
-      return null;
+      return 0;
     }
 
     console.log("Calling mainContract.getBalance()");
@@ -130,7 +130,7 @@ export class MainContract implements Contract {
       };
     } catch (error) {
       console.error("Error fetching contract balance:", error);
-      return null;
+      return 0;
     }
   }
 }
