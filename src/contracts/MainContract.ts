@@ -9,10 +9,15 @@ export function mainContractConfigToCell(config: MainContractConfig): Cell {
   return beginCell().storeUint(config.number, 32).storeAddress(config.address).storeAddress(config.owner_address).endCell();
 }
 export class MainContract implements Contract {
+  provider: ContractProvider | undefined;
   constructor(
     readonly address: Address,
     readonly init?: { code: Cell; data: Cell }
   ) {}
+
+  setProvider(provider: ContractProvider) {
+    this.provider = provider;
+  }
 
   static createFromConfig(
     code: Cell,
@@ -81,21 +86,38 @@ export class MainContract implements Contract {
     })
   }
 
-  async getData(provider:ContractProvider){
-    const {stack} = await provider.get("get_contract_storage_data",[]);
-    return {
-      number:stack.readNumber(),    
-      recent_sender: stack.readAddress(),
-      owner_address: stack.readAddress()
+  async getData(){
+    if (!this.provider) {
+      throw new Error("Provider not set");
     }
+    try {
+      const { stack } = await this.provider.get("get_contract_storage_data", []);
+      console.log("Stack response:", stack);
+
+      return {
+          number: stack.readNumber(),
+          recent_sender: stack.readAddress(),
+          owner_address: stack.readAddress()
+      };
+  } catch (error) {
+      console.error("Error fetching contract data:", error);
+      return null;
+  }
 
   }
 
-  async getBalance(provider:ContractProvider){
-    const {stack}  = await provider.get("balance",[]);
+  async getBalance(){
+    if(!this.provider){
+      throw new Error("Provider not set");
+    }
+    try{
+    const {stack}  = await this.provider.get("balance",[]);
     return {
       balance: stack.readNumber()
     }
+  }catch(error){
+    console.error("Error fetching balance", error);
+      return null;
   }
-
+}
 }
