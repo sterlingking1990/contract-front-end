@@ -1,4 +1,4 @@
-import { Address, Cell, ContractGetMethodResult, ContractProvider, ContractState, SendMode, Sender, TupleItem, TupleReader } from "ton-core";
+import { Address, Cell, ContractGetMethodResult, ContractProvider, ContractState, SendMode, Sender, TupleItem } from "ton-core";
  // Assuming this is the correct import path for ContractProvider
 import { Maybe } from "ton-core/dist/utils/maybe";
 
