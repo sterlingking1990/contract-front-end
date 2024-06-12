@@ -51,9 +51,9 @@ export function useMainContract() {
                     setBalance(balance);
                 }
                 setContractData({
-                    counter_value: val.number,
-                    recent_sender: val.recent_sender,
-                    owner_address: val.owner_address,
+                    counter_value: val.number ?? "011",
+                    recent_sender: val.recent_sender ?? "no sender",
+                    owner_address: val.owner_address ?? "no owner addr",
                 });
             } catch (error) {
                 console.error("Error fetching contract data:", error);
