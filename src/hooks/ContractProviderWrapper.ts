@@ -13,25 +13,15 @@ class MyContractProvider implements ContractProvider {
     }
 
     async getState(): Promise<ContractState> {
-        return this.getState();
+        return this.client.getContractState(this.address);
     }
 
     async get(name: string, args: TupleItem[]): Promise<ContractGetMethodResult> {
-        // Implement get method using your logic
-        // Example implementation:
-        const result: ContractGetMethodResult = {
-            stack: new TupleReader([]), // Provide actual implementation based on your needs
-            gasUsed: BigInt(0), // Initialize gasUsed as needed
-            logs: null, // Initialize logs if required
-        };
-        return result;
+        return this.client.runGetMethod(this.address, name, args);
     }
 
     async external(message: Cell): Promise<void> {
-        // Implement external method using your logic
-        // Example implementation:
-        console.log("External method called with message:", message);
-        // Perform external operations
+        return this.client.sendExternalMessage(this.address, message);
     }
 
     async internal(via: Sender, args: {
@@ -40,10 +30,7 @@ class MyContractProvider implements ContractProvider {
         sendMode?: SendMode;
         body?: Maybe<Cell | string>;
     }): Promise<void> {
-        // Implement internal method using your logic
-        // Example implementation:
-        console.log("Internal method called with via:", via, "and args:", args);
-        // Perform internal operations
+        return this.client.sendInternalMessage(via, this.address, args.value, args.bounce, args.sendMode, args.body);
     }
 }
 

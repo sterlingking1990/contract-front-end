@@ -29,10 +29,10 @@ export function useMainContract() {
             return null;
         }
         console.log("Initializing mainContract");
-        const contractProvider = new MyContractProvider(client,Address.parse("EQCD1o3InWOcSeWEh8P6mOisSDfWm6DdmyecyUQO8Eanu8c-"));
         const contract = new MainContract(
             Address.parse("EQCD1o3InWOcSeWEh8P6mOisSDfWm6DdmyecyUQO8Eanu8c-")
         );
+        const contractProvider = new MyContractProvider(client,contract.address);
         contract.setProvider(contractProvider);
         console.log("MainContract initialized");
         return client.open(contract) as OpenedContract<MainContract>;
