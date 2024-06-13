@@ -19,14 +19,14 @@ export function useMainContract() {
         counter_value: number;
         recent_sender: Address;
         owner_address: Address;
-    }>(null);
+    }>();
 
-    const [balance, setBalance] = useState<null | any>(0);
+    const [balance, setBalance] = useState<null | number>(0);
 
     const mainContract = useAsyncInitialize(async () => {
         if (!client) {
             console.log("Client not initialized");
-            return null;
+            return;
         }
         console.log("Initializing mainContract");
         const contract = new MainContract(
@@ -46,23 +46,23 @@ export function useMainContract() {
             setContractData(null);
             console.log("Calling mainContract.getData()");
             try {
-                const val:any = await mainContract.getData();
+                const val = await mainContract.getData();
+                const {balance}  = await mainContract.getBalance();
                 console.log("Received data:", val);
                 if (val) {
-                    const balance:any  = await mainContract.getBalance();
                     console.log("Received balance:", balance);
+                    setContractData({
+                        counter_value: val.number,
+                        recent_sender: val.recent_sender,
+                        owner_address: val.owner_address,
+                    });
                     setBalance(balance);
+                    await sleep(5000);
+                    getValue();
                 }
-                setContractData({
-                    counter_value: val.number ?? "011",
-                    recent_sender: val.recent_sender ?? "no sender",
-                    owner_address: val.owner_address ?? "no owner addr",
-                });
             } catch (error) {
                 console.error("Error fetching contract data:", error);
             }
-            await sleep(5000);
-            getValue();
         }
         getValue();
     }, [mainContract]);

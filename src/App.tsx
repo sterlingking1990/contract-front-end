@@ -6,8 +6,8 @@ import { useTonConnect } from "./hooks/useTonConnect";
 function App() {
   const {
     contract_address,
-    counter_value,
     contract_balance,
+    counter_value,
     sendIncrement,
     sendDeposit,
     sendWithdrawalRequest,
