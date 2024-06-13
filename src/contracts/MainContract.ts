@@ -1,5 +1,4 @@
 import { Address, Cell, Contract, ContractProvider, SendMode, Sender, beginCell, contractAddress } from "ton-core";
-import { useTonClient } from "../hooks/useTonClient";
 
 export type MainContractConfig = {
   number: number;
@@ -16,10 +15,11 @@ export class MainContract implements Contract {
   ) {}
 
   static createFromConfig(
+    config: MainContractConfig,
     code: Cell,
     workchain = 0
   ) {
-    const data = beginCell().storeUint(1, 32).storeAddress(Address.parse("EQCD1o3InWOcSeWEh8P6mOisSDfWm6DdmyecyUQO8Eanu8c-")).storeAddress(Address.parse("EQCD1o3InWOcSeWEh8P6mOisSDfWm6DdmyecyUQO8Eanu8c-")).endCell();
+    const data = mainContractConfigToCell(config);
     const init = { code, data };
     const address = contractAddress(workchain, init);
 
@@ -31,6 +31,7 @@ export class MainContract implements Contract {
       value,
       sendMode:SendMode.PAY_GAS_SEPARATELY,
       body: beginCell().storeUint(2,32).endCell(),
+      bounce:false
     })
   }
 
@@ -82,40 +83,21 @@ export class MainContract implements Contract {
     })
   }
 
-  async getData(){
-    const provider = useTonClient()?.provider as any;
-    if (!useTonClient()?.provider) {
-      throw new Error("Provider not set");
+  async getData(provider:ContractProvider){
+    const {stack} = await provider.get("get_contract_storage_data",[]);
+    return {
+      number:stack.readNumber(),    
+      recent_sender: stack.readAddress(),
+      owner_address: stack.readAddress()
     }
-    try {
-      const { stack } = await provider.get("get_contract_storage_data", []);
-      console.log("Stack response:", stack);
-
-      return {
-          number: stack.readNumber(),
-          recent_sender: stack.readAddress(),
-          owner_address: stack.readAddress()
-      };
-  } catch (error) {
-      console.error("Error fetching contract data:", error);
-      return null;
-  }
 
   }
 
-  async getBalance(){
-    const provider = useTonClient()?.provider as any;
-    if(!provider){
-      throw new Error("Provider not set");
-    }
-    try{
+  async getBalance(provider:ContractProvider){
     const {stack}  = await provider.get("balance",[]);
     return {
       balance: stack.readNumber()
     }
-  }catch(error){
-    console.error("Error fetching balance", error);
-      return null;
   }
-}
+
 }
