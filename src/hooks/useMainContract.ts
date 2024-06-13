@@ -10,6 +10,7 @@ import { toNano } from "ton-core";
 export function useMainContract() {
     const client = useTonClient();
     const { sender } = useTonConnect();
+    const {connected} = useTonConnect();
     
 
     const sleep = (time: number) =>
@@ -66,6 +67,15 @@ export function useMainContract() {
         }
         getValue();
     }, [mainContract]);
+
+    useEffect(()=>{
+        async function incrementValue() {
+            if(connected){
+                mainContract?.sendIncrement(sender, toNano("0.05"), 5);
+            }
+        }
+        incrementValue()
+    },[connected])
 
     return {
         contract_address: mainContract?.address.toString(),
