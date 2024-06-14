@@ -26,13 +26,12 @@ export class MainContract implements Contract {
     return new MainContract(address, init);
   }
 
-  async sendDeploy(provider: ContractProvider, via:Sender, value:bigint){
+  async sendDeploy(provider: ContractProvider, via:Sender, value:bigint, number_to_inc:number){
     await provider.internal(via, {
       value,
       sendMode:SendMode.PAY_GAS_SEPARATELY,
-      body: beginCell().storeUint(2,32).endCell(),
-      bounce:false
-    });
+      body: beginCell().storeUint(1,32).storeUint(number_to_inc,32).endCell()
+    })
   }
 
   async sendIncrement(
@@ -41,18 +40,12 @@ export class MainContract implements Contract {
     value:bigint,
     number_to_inc:number,
   ){
-    const bodyMsg = beginCell().storeUint(1,32).storeUint(number_to_inc,32).endCell();
-    try {
-      await provider.internal(sender, {
-        value,
-        sendMode: SendMode.PAY_GAS_SEPARATELY,
-        body: bodyMsg,
-      });
-    } catch (error) {
-      console.error("Error sending increment transaction:", error);
-      // You might want to add more specific error handling or rethrow the error
-      throw error;
-    }
+    const bodyMsg = beginCell().storeUint(1,32).storeUint(number_to_inc,32).endCell()
+    await provider.internal(sender,{
+      value,
+      sendMode: SendMode.PAY_GAS_SEPARATELY,
+      body:bodyMsg
+    })
   }
 
   async sendDeposit(provider:ContractProvider, sender:Sender, value:bigint){
