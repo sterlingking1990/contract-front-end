@@ -1,7 +1,8 @@
 {
+    "url": "https://join.toncompany.org",
     "name": "Kings&Crypto Tutorial",
+     "iconUrl":"https://sterlingking1990.github.io/contract-front-end/icon.png",
     "short_name": "K&CT",
-    "description":"A ton blockchain tutorial",
-    "iconUrl":"https://sterlingking1990.github.io/contract-front-end/icon.png"
+    "description":"A ton blockchain tutorial"
   }
   
