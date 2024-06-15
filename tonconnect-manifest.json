@@ -1,8 +1,17 @@
 {
-    "url": "https://join.toncompany.org",
     "name": "Kings&Crypto Tutorial",
-     "iconUrl":"https://sterlingking1990.github.io/contract-front-end/icon.png",
     "short_name": "K&CT",
-    "description":"A ton blockchain tutorial"
+    "description": "A ton blockchain tutorial",
+    "start_url": "/",
+    "icons": [
+      {
+        "src": "https://sterlingking1990.github.io/contract-front-end/icon.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "background_color": "#FFFFFF",
+    "theme_color": "#FFFFFF",
+    "display": "standalone"
   }
   
