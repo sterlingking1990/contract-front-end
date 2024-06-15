@@ -10,7 +10,6 @@ import { toNano } from "ton-core";
 export function useMainContract() {
     const client = useTonClient();
     const { sender } = useTonConnect();
-    const {connected} = useTonConnect();
     
 
     const sleep = (time: number) =>
@@ -31,7 +30,7 @@ export function useMainContract() {
         }
         console.log("Initializing mainContract");
         const contract = new MainContract(
-            Address.parse("EQBOg-xEI7Ykaae9qo33JtDFo0XY7nFcpaF411ESyQthY9L7")
+            Address.parse("EQBebegGLDNC3XF_I2RUV_-MpRVx57sg7dtQZU7SiZGe6tH-")
         );
 
         console.log("MainContract initialized");
@@ -68,26 +67,17 @@ export function useMainContract() {
         getValue();
     }, [mainContract]);
 
-    useEffect(()=>{
-        async function incrementValue() {
-            if(connected){
-                mainContract?.sendIncrement(sender, toNano("0.05"), 5);
-            }
-        }
-        incrementValue()
-    },[connected])
-
     return {
         contract_address: mainContract?.address.toString(),
         contract_balance: balance,
         ...contractData,
-        sendIncrement: async () => {
+        sendIncrement: () => {
             return mainContract?.sendIncrement(sender, toNano("0.05"), 5);
         },
-        sendDeposit: async () => {
+        sendDeposit: () => {
             return mainContract?.sendDeposit(sender, toNano("1"));
         },
-        sendWithdrawalRequest: async () => {
+        sendWithdrawalRequest: () => {
             return mainContract?.sendWithdrawalRequest(sender, toNano("0.05"), toNano("0.7"));
         },
     };
