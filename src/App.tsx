@@ -32,25 +32,9 @@ function App() {
           <div>{counter_value ?? "loading..."}</div>
         </div>
 
-        {connected && (
-          <a
-            onClick={() => {
-              sendIncrement();
-            }}
-          >
-            Increment by 5
-          </a>
-        )}
+        {connected && <a onClick={() => sendIncrement()}>Increment by 5</a>}
         <br />
-        {connected && (
-          <a
-            onClick={() => {
-              sendDeposit();
-            }}
-          >
-            Deposit 1 Ton
-          </a>
-        )}
+        {connected && <a onClick={() => sendDeposit()}>Deposit 1 Ton</a>}
         <br />
         {connected && (
           <a

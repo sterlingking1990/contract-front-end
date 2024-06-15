@@ -30,7 +30,7 @@ export function useMainContract() {
         }
         console.log("Initializing mainContract");
         const contract = new MainContract(
-            Address.parse("EQBebegGLDNC3XF_I2RUV_-MpRVx57sg7dtQZU7SiZGe6tH-")
+            Address.parse("EQBJ2r5DmCRwmiyMflqPu02fJF9bPdU-cLMKYuIW2dGHMMvG")
         );
 
         console.log("MainContract initialized");
@@ -71,14 +71,29 @@ export function useMainContract() {
         contract_address: mainContract?.address.toString(),
         contract_balance: balance,
         ...contractData,
-        sendIncrement: () => {
-            return mainContract?.sendIncrement(sender, toNano("0.05"), 5);
+        sendIncrement: async () => {
+            try {
+                await mainContract?.sendIncrement(sender, toNano("0.05"), 5);
+                console.log("Increment sent successfully");
+            } catch (error) {
+                console.error("Error sending increment:", error);
+            }
         },
-        sendDeposit: () => {
-            return mainContract?.sendDeposit(sender, toNano("1"));
+        sendDeposit: async () => {
+            try {
+                await mainContract?.sendDeposit(sender, toNano("1"));
+                console.log("Deposit sent successfully");
+            } catch (error) {
+                console.error("Error sending deposit:", error);
+            }
         },
-        sendWithdrawalRequest: () => {
-            return mainContract?.sendWithdrawalRequest(sender, toNano("0.05"), toNano("0.7"));
-        },
+        sendWithdrawalRequest: async () => {
+            try {
+                await mainContract?.sendWithdrawalRequest(sender, toNano("0.05"), toNano("0.7"));
+                console.log("Withdrawal request sent successfully");
+            } catch (error) {
+                console.error("Error sending withdrawal request:", error);
+            }
+        }
     };
 }
