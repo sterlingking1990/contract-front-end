@@ -8,7 +8,7 @@ function App() {
   const { connected } = useTonConnect();
   const [tonConnectUI] = useTonConnectUI();
 
-  const contractAddress = "EQCdCuCi-tTagiVdjzaZzcjjlepai8CrdCh-cUZC2apC_LOo";
+  const contractAddress = "EQBJ2r5DmCRwmiyMflqPu02fJF9bPdU-cLMKYuIW2dGHMMvG";
   const handleIncrement = () => {
     const bodyMsg = beginCell()
       .storeUint(1, 32)
