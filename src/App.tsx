@@ -36,7 +36,7 @@ function App() {
     sendWithdrawalRequest,
   } = useMainContract();
 
-  const tonConnectUrl = `https://tonhub.com/ton-connect?v=2&id=ec530b57db301d5aeeb0f84ace65f98d9dd07899f3564917a81b11d320740246&r={"manifestUrl":"https://sterlingking1990.github.io/contract-front-end/tonconnect-manifest.json","items":[{"name":"ton_addr"}]}&ret=https://sterlingking1990.github.io/contract-front-end/`;
+  const tonConnectUrl = `https://tonhub.com/ton-connect?v=2&id=ec530b57db301d5aeeb0f84ace65f98d9dd07899f3564917a81b11d320740246&r={"manifestUrl":"https://sterlingking1990.github.io/contract-front-end/tonconnect-manifest.json","items":[{"name":"ton_addr"}]}&ret=https://join.toncompany.org`;
 
   return (
     <div>
