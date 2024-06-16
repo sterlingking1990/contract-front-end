@@ -26,7 +26,8 @@ function App() {
   return (
     <div>
       <div>
-        <TonConnectButton onClick={handleConnect} />
+        <TonConnectButton />
+        <button onClick={handleConnect}>Connect to TonHub</button>
       </div>
       <div>
         <div className="Card">
