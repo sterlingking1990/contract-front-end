@@ -8,7 +8,7 @@ function App() {
   const { connected } = useTonConnect();
   const [tonConnectUI] = useTonConnectUI();
 
-  const contractAddress = "EQBJ2r5DmCRwmiyMflqPu02fJF9bPdU-cLMKYuIW2dGHMMvG";
+  const contractAddress = "EQCdCuCi-tTagiVdjzaZzcjjlepai8CrdCh-cUZC2apC_LOo";
   const handleIncrement = () => {
     const bodyMsg = beginCell()
       .storeUint(1, 32)
@@ -35,18 +35,18 @@ function App() {
     sendDeposit,
     sendWithdrawalRequest,
   } = useMainContract();
-  const connI = tonConnectUI.connector;
 
+  const tonConnectUrl = `https://tonhub.com/ton-connect?v=2&id=ec530b57db301d5aeeb0f84ace65f98d9dd07899f3564917a81b11d320740246&r={"manifestUrl":"https://sterlingking1990.github.io/contract-front-end/tonconnect-manifest.json","items":[{"name":"ton_addr"}]}&ret=googlechrome://`;
   return (
     <div>
-      <div>
-        <button onClick={() => connI.connect}>Connect to TonHub</button>
-        {connected && (
-          <div>
-            <button onClick={handleIncrement}>Increment by 1</button>
-          </div>
-        )}
-      </div>
+      <button onClick={() => window.open(tonConnectUrl, "_blank")}>
+        Connect to TonHub
+      </button>
+      {connected && (
+        <div>
+          <button onClick={handleIncrement}>Increment by 1</button>
+        </div>
+      )}
       <div>
         <div className="Card">
           <b>Our Contract Address</b>
