@@ -1,32 +1,11 @@
 import "./App.css";
-import { useTonConnectUI } from "@tonconnect/ui-react";
+import { TonConnectButton } from "@tonconnect/ui-react";
 import { useMainContract } from "./hooks/useMainContract";
 import { useTonConnect } from "./hooks/useTonConnect";
-import { beginCell, toNano } from "ton-core";
 import WebApp from "@twa-dev/sdk";
 
 function App() {
   const { connected } = useTonConnect();
-  const [tonConnectUI] = useTonConnectUI();
-
-  const contractAddress = "EQCdCuCi-tTagiVdjzaZzcjjlepai8CrdCh-cUZC2apC_LOo";
-  const handleIncrement = () => {
-    const bodyMsg = beginCell()
-      .storeUint(1, 32)
-      .storeUint(1, 32)
-      .endCell();
-    const myTransaction = {
-      validUntil: Math.floor(Date.now() / 1000) + 60,
-      messages: [
-        {
-          address: contractAddress,
-          amount: toNano("0.02").toString(),
-          payload: bodyMsg.toBoc().toString("base64"),
-        },
-      ],
-    };
-    tonConnectUI.sendTransaction(myTransaction);
-  };
 
   const {
     contract_address,
@@ -37,23 +16,9 @@ function App() {
     sendWithdrawalRequest,
   } = useMainContract();
 
-  const tonConnectUrl = `https://tonhub.com/ton-connect?v=2&id=ec530b57db301d5aeeb0f84ace65f98d9dd07899f3564917a81b11d320740246&r={"manifestUrl":"https://sterlingking1990.github.io/contract-front-end/tonconnect-manifest.json","items":[{"name":"ton_addr"}]}&ret=https://join.toncompany.org`;
-
-  const showAlert = () => {
-    WebApp.showAlert("Hey there!");
-  };
-
   return (
     <div>
-      <button onClick={() => window.open(tonConnectUrl, "_blank")}>
-        Connect to TonHub
-      </button>
-
-      {connected && (
-        <div>
-          <button onClick={handleIncrement}>Increment by 1</button>
-        </div>
-      )}
+      <TonConnectButton />
       <div>
         <div className="Card">
           <b>{WebApp.platform}</b>
@@ -65,13 +30,16 @@ function App() {
           <b>Counter Value</b>
           <div>{counter_value ?? "loading..."}</div>
         </div>
-        <a
-          onClick={() => {
-            showAlert();
-          }}
-        >
-          Show Alert
-        </a>
+        <div>
+          <a
+            onClick={() => {
+              showAlert();
+            }}
+          >
+            Show Alert
+          </a>
+        </div>
+        <br />
         {connected && <a onClick={() => sendIncrement()}>Increment by 5</a>}
         <br />
         {connected && <a onClick={() => sendDeposit()}>Deposit 1 Ton</a>}
