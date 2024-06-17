@@ -1,5 +1,4 @@
 import "./App.css";
-import { TonConnectButton } from "@tonconnect/ui-react";
 import { useMainContract } from "./hooks/useMainContract";
 import { useTonConnect } from "./hooks/useTonConnect";
 import WebApp from "@twa-dev/sdk";
@@ -18,7 +17,6 @@ function App() {
 
   return (
     <div>
-      <TonConnectButton />
       <div>
         <div className="Card">
           <b>{WebApp.platform}</b>
